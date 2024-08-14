@@ -21,7 +21,7 @@ import { Report } from './reports/report.entity';
       password: new ConfigService().get('DATABASE_PASSWORD'),
       database: new ConfigService().get('DATABASE_NAME'),
       entities: [User, Report],
-      synchronize: true,
+      // synchronize: true,
     }),
     UsersModule,
     ReportsModule,
