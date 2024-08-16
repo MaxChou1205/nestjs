@@ -9,12 +9,15 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  create(email: string, password: string): Promise<User> {
+  async create(email: string, password: string): Promise<User> {
     const user = this.usersRepository.create({ email, password });
-    return this.usersRepository.save(user);
+    return await this.usersRepository.save(user);
   }
 
   async findOne(id: number) {
+    if (!id) {
+      return null;
+    }
     const user = await this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -22,8 +25,8 @@ export class UsersService {
     return user;
   }
 
-  find(email: string) {
-    return this.usersRepository.find({ where: { email } });
+  async find(email: string) {
+    return await this.usersRepository.find({ where: { email } });
   }
 
   async update(id: number, attrs: Partial<User>) {
