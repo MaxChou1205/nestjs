@@ -12,16 +12,21 @@ import { Report } from './reports/report.entity';
   providers: [AppService],
   controllers: [AppController],
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: new ConfigService().get('DATABASE_HOST'),
-      port: parseInt(new ConfigService().get('DATABASE_PORT')),
-      username: new ConfigService().get('DATABASE_USER'),
-      password: new ConfigService().get('DATABASE_PASSWORD'),
-      database: new ConfigService().get('DATABASE_NAME'),
-      entities: [User, Report],
-      // synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get('DATABASE_HOST'),
+        port: parseInt(config.get('DATABASE_PORT')),
+        username: config.get('DATABASE_USER'),
+        password: config.get('DATABASE_PASSWORD'),
+        database: config.get('DATABASE_NAME'),
+        entities: [User, Report],
+        // synchronize: true,
+      }),
     }),
     UsersModule,
     ReportsModule,

@@ -64,6 +64,7 @@ export class UsersController {
 
   // @UseInterceptors(new SerializeInterceptor(UserDto))
   @Get('/:id')
+  @UseGuards(AuthGuard)
   findUser(@Param('id') id: string) {
     const parsedId = parseInt(id);
     if (isNaN(parsedId)) {
@@ -73,16 +74,19 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   findAllUsers(@Query('email') email: string) {
     return this.usersService.find(email);
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard)
   removeUser(@Param('id') id: string) {
     return this.usersService.remove(parseInt(id));
   }
 
   @Patch('/:id')
+  @UseGuards(AuthGuard)
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(parseInt(id), body);
   }
